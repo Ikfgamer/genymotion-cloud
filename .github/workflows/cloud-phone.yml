@@ -1,0 +1,27 @@
+name: Start Genymotion Cloud Phone
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  start-cloud-phone:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+      
+    - name: Start Genymotion Cloud Device
+      run: |
+        RESPONSE=$(curl -s -X POST "https://cloud.geny.io/api/v1/instances" \
+        -H "Authorization: Bearer ${{ secrets.GENYMOTION_API_TOKEN }}" \
+        -H "Content-Type: application/json" \
+        -d '{
+              "template_id": "your-template-id",
+              "name": "GitHub-Cloud-Phone",
+              "region": "us-east-1"
+            }')
+        
+        echo "Genymotion Cloud Device Response:"
+        echo "$RESPONSE"
+        
